@@ -201,15 +201,15 @@
                                             <td class="v-align-middle">{!! $product->rating->rate !!}</td>
                                             
                                             <td class="v-align-middle">
-                                              <form action="" method="POST" class="form-horizontal" role="form" onsubmit="return confirmarEliminar()">
+                                              <form action="" method="DELETE" class="form-horizontal" role="form" onsubmit="return confirmarEliminar()">
 
-                                                <input type="hidden" name="_method" value="PUT">
+                                                <input type="hidden" name="_method" value="DELETE">
                                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">                                            
                                                 <button onclick="location.href=''" href="" type="button" class="btn btn-dark"><i class="fa-regular fa-eye"></i></button>
 
-                                                <a href="{{ route('update',$product->id) }}" class="btn btn-primary"><i class="fa-solid fa-pencil"></i></a>          
+                                                <a href="{{ route('edit') }}" class="btn btn-primary"><i class="fa-solid fa-pencil"></i></a>          
 
-                                                <button type="submit" class="btn btn-danger fa-regular fa-delete-left""><i class=""></i></button>
+                                                <button type="submit" class="btn btn-danger fa-regular fa-delete-left"><i class=""></i></button>
 
                                               </form>                             
                                                 

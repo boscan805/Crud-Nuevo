@@ -73,7 +73,6 @@
                <div class="col-md-5">
                   <!-- Logo -->
                   <div class="logo">
-                     <h1><a href="{{ route('admin/dashboard') }}">Administrador</a></h1>
                   </div>
                </div>
                <div class="col-md-5">
@@ -94,7 +93,6 @@
                   <div class="navbar navbar-inverse" role="banner">
                       <nav class="collapse navbar-collapse bs-navbar-collapse navbar-right" role="navigation">
                         <ul class="nav navbar-nav">
-                          <li><a href="{{ route('admin/dashboard') }}">Administrador</a></li>
                         </ul>
                       </nav>
                   </div>
@@ -110,12 +108,7 @@
             <div class="sidebar content-box" style="display: block;">
 
               <ul class="list-group">
-                  <li class="list-group-item">
-                    <a href="{{ route('admin/dashboard') }}"> Dashboard</a>
-                  </li>
-                  <li class="list-group-item">
-                    <a href="{{ route('admin/bicicletas') }}"> Products</a>
-                  </li>
+
                   <li class="list-group-item">
                     Opción 1
                   </li>
@@ -162,10 +155,7 @@
             <div class="col-md-10">
 
         <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('admin/dashboard') }}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('admin/bicicletas') }}">Products</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Update</li>
+         
           </ol>
         </nav>
         
@@ -190,12 +180,12 @@
                                   
                     <section class="example mt-4">
 
-                      <form method="POST" action="{{ route('admin/bicicletas/update',$bicicletas->id) }}" role="form" enctype="multipart/form-data">
+                      <form method="GET" action="{{ route('index') }}" role="form" enctype="multipart/form-data">
 
-                        <input type="hidden" name="_method" value="PUT">
+                        <input type="hidden" name="_method" value="GET">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-                        @include('admin.bicicletas.frm.prt')
+                        @include('admin.product.frm.prt')
                                                           
                       </form>                                      
                                     
@@ -241,7 +231,6 @@
               </div>              
 
               <div class="col-md-3">
-                <h3>Android</h3>
                 </a>
               </div>
 

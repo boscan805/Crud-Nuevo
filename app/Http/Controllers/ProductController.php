@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\ItemCreateRequest;
 
-
+use function GuzzleHttp\Promise\promise_for;
 
 class ProductController extends Controller
 {
@@ -58,8 +58,9 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $product = Product:: all();
-        return view('admin.product.crear' , compact('product'));
+       
+
+        return view('admin.product.crear');
     }
 
     /**
@@ -68,29 +69,27 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($request)
+    public function store()
     {
-        $curlUrl = "https://fakestoreapi.com/products'";
+        $curl = curl_init();
 
-        $datos = array("title" => "test product",  "price" => 13.5, "description" => "lorem ipsum dolor", "image" => "https://i.pravatar.cc", "category" => "electroni");
-        
-        $data_string = json_encode($datos);
-        
-        $ch=curl_init($curlUrl);
-        
-        curl_setopt($ch, CURLOPT_POST, true);
-        
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $datos);
-        
-        curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);
-        
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
-        
-                     
-        $respuesta = curl_exec( $ch );
-        
-        
-        curl_close($ch);
+curl_setopt_array($curl, array(
+  CURLOPT_URL => 'https://fakestoreapi.com/products',
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => '',
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 0,
+  CURLOPT_FOLLOWLOCATION => true,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => 'POST',
+));
+
+$response = curl_exec($curl);
+
+curl_close($curl);
+echo $response;
+
+        return Redirect::to('admin/products');
     }
 
     /**
@@ -110,16 +109,30 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $product)
+    public function edit()
     {
-        $id = 0;
         
-        $product = Product::find($id);
- 
-        $images = Product::find($id)->images;
- 
-        return view('admin/products.update', compact('images'), ['products' => $product]);
+        $curl = curl_init();
+
+curl_setopt_array($curl, array(
+  CURLOPT_URL => 'https://fakestoreapi.com/products/7',
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => '',
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 0,
+  CURLOPT_FOLLOWLOCATION => true,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => 'PUT',
+));
+
+$response = curl_exec($curl);
+
+curl_close($curl);
+echo $response;
+
+        return view('admin/product.actualizar');
     }
+    
 
     /**
      * Update the specified resource in storage.
@@ -128,48 +141,30 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update()
     {
-        $id = 0;
-        $product= Product::find($id);
-        $product->name = $request->name;
-        $product->price = $request->price;
-        $product->stock = $request->stock;
+       
         
-        $product->save();
- 
-        $ci = $request->file('img');
- 
-        if(!empty($ci)){
- 
-            $this->validate($request, [
- 
-                'name' => 'required',
-                'img.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
- 
-            ]);        
- 
-            foreach($request->file('img') as $image)
-                {
-                    $imagen = $image->getClientOriginalName();
-                    $format = $image->getClientOriginalExtension();
-                    $image->move(public_path().'/uploads/', $imagen);
- 
-                    DB::table('images')->insert(
-                        [
-                            'name' => $imagen, 
-                            'format' => $format,
-                            'products_id' => $product->id,
-                            'created_at' => date("Y-m-d H:i:s"),
-                            'updated_at' => date("Y-m-d H:i:s")
-                        ]
-                    );
- 
-                } 
- 
-        }
- 
-        Session::flash('message', 'Editado Satisfactoriamente !');
+
+        $curl = curl_init();
+        
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => 'https://fakestoreapi.com/products/7',
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => '',
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 0,
+          CURLOPT_FOLLOWLOCATION => true,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => 'PATCH',
+        ));
+        
+        $response = curl_exec($curl);
+        
+        curl_close($curl);
+        echo $response;
+        
+
         return Redirect::to('admin/products');
         
     }
@@ -181,32 +176,26 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        $id = 0;
-        $product = Product::find($id);
- 
-        // Selecciono las imágenes a eliminar 
-        $imagen = DB::table('images')->where('products_id', '=', $id)->get();        
-        $imgfrm = $imagen->implode('name', ',');  
-        //dd($imgfrm);        
- 
-        $imagenes = explode(",", $imgfrm);
-        
-        foreach($imagenes as $image){
-            
-            $dirimgs = public_path().'/uploads/'.$image;
-            
-            if(File::exists($dirimgs)) {
-                File::delete($dirimgs);                
-            }
- 
-        }    
- 
-        
-        Product::destroy($id); 
- 
-        $product->images()->delete();
+        $curl = curl_init();
+
+curl_setopt_array($curl, array(
+  CURLOPT_URL => 'https://fakestoreapi.com/products/6',
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => '',
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 0,
+  CURLOPT_FOLLOWLOCATION => true,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => 'DELETE',
+));
+
+$response = curl_exec($curl);
+
+curl_close($curl);
+echo $response;
  
         Session::flash('message', 'Eliminado Satisfactoriamente !');
+
         return Redirect::to('admin/products');
 
         
@@ -215,18 +204,6 @@ class ProductController extends Controller
 
     public function eliminarimagen($id, $bid)
     {
-        $product = Image::find($id);
- 
-        $bi = $bid;
- 
-        $imagen = Image::select('name')->where('id', '=', $id)->get();
-        $imgfrm = $imagen->implode('name', ', ');
-        //dd($imgfrm);
-        Storage::delete($imgfrm);
- 
-        Image::destroy($id);
- 
-        Session::flash('message', 'Imagen Eliminada Satisfactoriamente !');
-        return Redirect::to('admin/product/update/'.$bi.'');
+        return Redirect::to('admin/products');
     }
 }

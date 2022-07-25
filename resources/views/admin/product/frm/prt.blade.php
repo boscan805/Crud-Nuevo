@@ -22,7 +22,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="stock" class="negrita">Stock:</label>                          
+                  <label for="stock" class="negrita">Description:</label>                          
                   <div>
                     <input class="form-control" placeholder="40" required="required" name="stock" type="text" id="stock" value="{{ $products->stock }}">                              
                   </div>
@@ -70,23 +70,23 @@
               @else
 
                 <div class="form-group">
-                  <label for="nombre" class="negrita">Nombre:</label>                          
+                  <label for="nombre" class="negrita">Name:</label>                          
                   <div>
                     <input class="form-control" placeholder="" required="required" name="nombre" type="text" id="nombre">                              
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="precio" class="negrita">Precio:</label>                          
+                  <label for="precio" class="negrita">Price:</label>                          
                   <div>
                     <input class="form-control" placeholder="2500.00" required="required" name="precio" type="text" id="precio">                              
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="stock" class="negrita">Stock:</label>                          
+                  <label for="stock" class="negrita">Description:</label>                          
                   <div>
-                    <input class="form-control" placeholder="35" required="required" name="stock" type="text" id="stock">                              
+                    <input class="form-control" placeholder="" required="required" name="stock" type="text" id="stock">                              
                   </div>
                 </div>
 
